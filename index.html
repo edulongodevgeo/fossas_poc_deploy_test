@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="PT-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coletas de Dados Praias</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+
+
+</head>
+
+<body>
+    <section class="hero is-primary is-bold">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title">Coletas de Dados Fossas - PoC</h1>
+            </div>
+        </div>
+    </section>
+
+    <button id="locate-button" class="button is-primary">Autolocalização</button>
+    <div class="wrap">
+        <div class="columns is-centered">
+            <div class="column is-half">
+                <form id="form" class="container m-4 pl-4" method="POST"
+                    action="https://script.google.com/macros/s/AKfycbxF_dLVbCyVmqbzyz1tm9l3yAdVxlR6w_-BYmxAQ1zmmgjQ4MhV33fWBDHhGJyETFE/exec">
+
+
+                    <div id="map" style="height: 300px; margin-bottom: 20px;"></div>
+
+                    <div class="field">
+                        <label class="label">Nome</label>
+                        <div class="control">
+                            <input class="input" type="text" placeholder="Nome" name="Nome" />
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Tipo</label>
+                        <div class="control">
+                            <input class="input" type="text" placeholder="matricula_pref" name="matricula_pref" />
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Status</label>
+                        <div class="control">
+                            <input class="input" type="text" placeholder="id_companhia" name="id_companhia" />
+                        </div>
+                    </div>
+
+
+                    <!-- Outros campos do formulário... -->
+
+                    <!-- tipo_edif -->
+                    <div class="field">
+                        <label class="label">Tipo de Edificação</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="tipo_edif">
+                                    <option value="Edificação particular">Edificação particular</option>
+                                    <option value="Edificação comercial">Edificação comercial</option>
+                                    <option value="Edificação pública">Edificação pública</option>
+                                    <option value="Igreja ou semelhante">Igreja ou semelhante</option>
+                                    <option value="Outros">Outros</option>
+                                    <option value="Não foi possível avaliar">Não foi possível avaliar</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- tipo_mora -->
+                    <div class="field">
+                        <label class="label">Tipo de Moradia</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="tipo_mora">
+                                    <option value="Unifamiliar">Unifamiliar</option>
+                                    <option value="Multifamiliar">Multifamiliar</option>
+                                    <option value="Outros">Outros</option>
+                                    <option value="Não foi possível avaliar">Não foi possível avaliar</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- operacao -->
+                    <div class="field">
+                        <label class="label">Operação</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="operacao">
+                                    <option value="Em Operação">Em Operação</option>
+                                    <option value="Não Localizada">Não Localizada</option>
+                                    <option value="Desativada">Desativada</option>
+                                    <option value="Não Foi Possível Avaliar">Não Foi Possível Avaliar</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- local -->
+                    <div class="field">
+                        <label class="label">Local</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="local">
+                                    <option value="Frente Edificação">Frente Edificação</option>
+                                    <option value="Fundos Edificação">Fundos Edificação</option>
+                                    <option value="Lateral Edificação">Lateral Edificação</option>
+                                    <option value="Área Interna Edificação">Área Interna Edificação</option>
+                                    <option value="Calçada">Calçada</option>
+                                    <option value="Outros">Outros</option>
+                                    <option value="Não Foi Possível Avaliar">Não Foi Possível Avaliar</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- tipo -->
+                    <div class="field">
+                        <label class="label">Tipo</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="tipo">
+                                    <option value="Fossa filtro sumidouro">Fossa filtro sumidouro</option>
+                                    <option value="Fossa sumidouro">Fossa sumidouro</option>
+                                    <option value="Fossa apenas">Fossa apenas</option>
+                                    <option value="Sumidouro apenas">Sumidouro apenas</option>
+                                    <option value="Biodigestor">Biodigestor</option>
+                                    <option value="Outros">Outros</option>
+                                    <option value="Não Foi Possível Avaliar">Não Foi Possível Avaliar</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- mat_poco -->
+                    <div class="field">
+                        <label class="label">Material do Poço</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="mat_poco">
+                                    <option value="Tubo de concreto pré-moldado">Tubo de concreto pré-moldado</option>
+                                    <option value="Bloco + Alvenaria">Bloco + Alvenaria</option>
+                                    <option value="Polímero (plástico)">Polímero (plástico)</option>
+                                    <option value="Pedra + Alvenaria">Pedra + Alvenaria</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- qtd_sistemas -->
+                    <div class="field">
+                        <label class="label">Quantidade de Sistemas</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="qtd_sistemas">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="Outros">Outros</option>
+                                    <option value="Não Foi Possível Avaliar">Não Foi Possível Avaliar</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- qtdediffossas -->
+                    <div class="field">
+                        <label class="label">Quantidade de Fossas</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="qtdediffossas">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="Outros">Outros</option>
+                                    <option value="Não Foi Possível Avaliar">Não Foi Possível Avaliar</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- disposicao_final -->
+                    <div class="field">
+                        <label class="label">Disposição Final</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="disposicao_final">
+                                    <option value="Sumidouro">Sumidouro</option>
+                                    <option value="Corpo d'água">Corpo d'água</option>
+                                    <option value="Drenagem">Drenagem</option>
+                                    <option value="Caixa cloradora + drenagem">Caixa cloradora + drenagem</option>
+                                    <option value="Outros">Outros</option>
+                                    <option value="Não Foi Possível Avaliar">Não Foi Possível Avaliar</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- font_dado -->
+                    <div class="field">
+                        <label class="label">Fonte dos Dados</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="font_dado">
+                                    <option value="Sanapp">Sanapp</option>
+                                    <option value="Casan">Casan</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- uf -->
+                    <div class="field">
+                        <label class="label">UF</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="uf">
+                                    <option value="SC">SC</option>
+                                    <option value="PR">PR</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- cidade -->
+                    <div class="field">
+                        <label class="label">Cidade</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="cidade">
+                                    <option value="Florianópolis">Florianópolis</option>
+                                    <option value="Curitiba">Curitiba</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- bairro -->
+                    <div class="field">
+                        <label class="label">Bairro</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="bairro">
+                                    <option value="Bom Abrigo">Bom Abrigo</option>
+                                    <option value="Coqueiros">Coqueiros</option>
+                                    <option value="Abraão">Abraão</option>
+                                    <option value="Campeche">Campeche</option>
+                                    <option value="Outros">Outros</option>
+                                    <option value="Não Foi Possível Avaliar">Não Foi Possível Avaliar</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Outros campos do formulário... -->
+
+                    <div class="field">
+                        <label class="label">Latitude</label>
+                        <div class="control">
+                            <input class="input" type="text" placeholder="Latitude" id="latitude" name="Latitude" />
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Longitude</label>
+                        <div class="control">
+                            <input class="input" type="text" placeholder="Longitude" id="longitude" name="Longitude" />
+                        </div>
+                    </div>
+
+
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button class="button is-primary" type="submit" id="submit-button">ENVIAR</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="message"
+                    style="display: none; margin: 20px; font-weight: bold; color: green; padding: 8px; background-color: beige; border-radius: 4px; border-color: aquamarine;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <script src="script.js"></script>
+
+
+
+
+</body>
+
+</html>
